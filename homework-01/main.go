@@ -14,24 +14,22 @@ func main() {
 	var strText = "Введите сумму в рублях: "
 	fmt.Println(strText)
 	fmt.Fscan(os.Stdin, &sum)
-	fmt.Println(strTotal, div(sum, current))
+	fmt.Println(strTotal, fmt.Sprintf("%.2F\n", div(sum, current)))
 
 	//Даны катеты прямоугольного треугольника. Найти его площадь, периметр и гипотенузу.
 	var strTriang = "Введите длины катетов прямоугольного треугольника: "
 	var a, b float64
 	fmt.Println(strTriang)
 	fmt.Fscan(os.Stdin, &a, &b)
-	fmt.Println("Гипотенуза ", triangHypo(a, b), "Площадь ", triangSq(a, b), "Периметр ", triangPerim(a, b))
+	fmt.Println("Гипотенуза ", fmt.Sprintf("%.2F", triangHypo(a, b)), "Площадь ", fmt.Sprintf("%.2F", triangSq(a, b)), "Периметр ", fmt.Sprintf("%.2F", triangPerim(a, b)))
 
 	//Пользователь вводит сумму вклада в банк и годовой процент. Найти сумму вклада через 5 лет.
 	const yearbank = 5
 	var strBankIn = "Введите сумму вклада и годовой процент: "
 	var sumBank, prcBank float64
-	//sumBank = 100
-	//prcBank = 8
 	fmt.Println(strBankIn)
 	fmt.Fscan(os.Stdin, &sumBank, &prcBank)
-	fmt.Println("Сумма вклада за", yearbank, "лет составит :", bankAmmount(sumBank, prcBank))
+	fmt.Println("Сумма вклада за", yearbank, "лет составит :", fmt.Sprintf("%.2F", bankAmmount(sumBank, prcBank)))
 
 }
 
@@ -70,14 +68,9 @@ func bankAmmount(a float64, b float64) float64 {
 	var c float64
 	b = b/100 + 1
 	c = mult(a, b)
-	a = c
 	c = mult(c, b)
-	a = a + c
 	c = mult(c, b)
-	a = a + c
 	c = mult(c, b)
-	a = a + c
 	c = mult(c, b)
-	a = a + c
-	return a
+	return c
 }
