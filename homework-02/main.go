@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/big"
 	"os"
 )
 
@@ -22,15 +23,18 @@ import (
 
 func main() {
 	hwork01 := "Введите число для определения четное/нечетное "
+	hwork02 := "Введите число для проверки деления без остатка на 3"
+	hwork03 := "Первые 100 чисел Фибоначчи"
 	var num01 int
 	fmt.Println(hwork01)
 	fmt.Fscan(os.Stdin, &num01)
 	fmt.Println(divInt(num01))
-	hwork02 := "Введите число для проверки деления без остатка на 3"
 	var num02 int
 	fmt.Println(hwork02)
 	fmt.Fscan(os.Stdin, &num02)
 	fmt.Println(divnum(num02, 3))
+	fmt.Println(hwork03)
+	fibonacci(0, 1)
 }
 
 //Функция определения четное/нечетное число
@@ -49,4 +53,15 @@ func divnum(a, b int) string {
 		return fmt.Sprintf("Число %v делится на %v.\n", a, b)
 	}
 	return fmt.Sprintf("Число %v не делится на %v.\n", a, b)
+}
+
+//Функция нахождения первых 100 чисел Фибоначчи
+func fibonacci(x, y int64) {
+	a := big.NewInt(x)
+	b := big.NewInt(y)
+	for i := 0; i < 100; i++ {
+		a.Add(a, b)
+		a, b = b, a
+		fmt.Printf("%v\n", b)
+	}
 }
