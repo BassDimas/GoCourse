@@ -11,7 +11,7 @@ func Pop() string {
 	if numOfElements == 0 {
 		return ""
 	}
-	popElem := x[numOfElements-numOfElements]
+	popElem := x[0]
 	x = x[1:numOfElements]
 	return popElem
 
