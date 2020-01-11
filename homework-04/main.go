@@ -17,66 +17,88 @@ import (
 //		b. Получение значений и их запись в точку должны происходить только с помощью
 //		отдельных методов. В них надо проводить проверку на то, что такая точка может
 //		существовать на шахматной доске.
-type Figure struct {
-	PositionX string
-	PositionY int
+
+type Figure interface {
+	Position() (int, int)
+	AvailablePoints() []Point
 }
 
 type Point struct {
-	x int
-	y int
+	x, y int
 }
 
-type Move struct {
-	X int
-	Y int
+type Knight struct {
+	x, y int
 }
 
 var (
-	knightMoves = []Move{
-		Move{
-			Y: 1,
-			X: -2,
+	knightMoves = []Point{
+		Point{
+			y: 1,
+			x: -2,
 		},
-		Move{
-			Y: 2,
-			X: -1,
+		Point{
+			y: 2,
+			x: -1,
 		},
-		Move{
-			Y: 2,
-			X: 1,
+		Point{
+			y: 2,
+			x: 1,
 		},
-		Move{
-			Y: 1,
-			X: 2,
+		Point{
+			y: 1,
+			x: 2,
 		},
-		Move{
-			Y: -1,
-			X: 2,
+		Point{
+			y: -1,
+			x: 2,
 		},
-		Move{
-			Y: -2,
-			X: 1,
+		Point{
+			y: -2,
+			x: 1,
 		},
-		Move{
-			Y: -2,
-			X: -1,
+		Point{
+			y: -2,
+			x: -1,
 		},
-		Move{
-			Y: -1,
-			X: -2,
+		Point{
+			y: -1,
+			x: -2,
 		},
 	}
 )
+
+func (k *Knight) AvailablePoints() []Point {
+	//panic("not implemented")
+	returnResult := make([]Point, 0, 2)
+	for _, v := range knightMoves {
+		if canMove(k, v.x, v.y) {
+			k := Point{(k.x + v.x), (k.y + v.y)}
+			returnResult = append(returnResult, k)
+
+		}
+	}
+	return returnResult
+}
+
+func canMove(p *Knight, whereX, whereY int) bool {
+	destX := p.x + whereX
+	destY := p.y + whereY
+	return (destX <= 8 && destX >= 1) && (destY >= 1 && destY <= 8)
+}
+
+func (k *Knight) Position() (int, int) {
+	return k.x, k.y
+}
+
+func NewKnight(x, y int) Figure {
+	return &Knight{x, y}
+}
 
 //	2. Создать тип, описывающий контакт в телефонной книге.
 type PhoneBook struct {
 	name   string
 	number string
-}
-
-func (f Figure) Method() {
-	fmt.Println(f.PositionX, f.PositionY)
 }
 
 //		Создать псевдоним типа телефонной книги (массив контактов) и реализовать для него интерфейс Sort{}.
@@ -121,65 +143,18 @@ func main() {
 	sort.Sort(ByName(people))
 	fmt.Println(people)
 
-	var inputx string
+	var inputx int
 	var inputy int
 
-	fmt.Print("Введите позицию коня на доске, в формате x y, где x символ от a до h, а y число от 1 до 8: ")
+	fmt.Print("Введите позицию коня на доске, в формате x y, где x и y число от 1 до 8: ")
 	if _, err := fmt.Scanln(&inputx, &inputy); err != nil {
 		fmt.Println(err)
 	}
 	if input == "exit" {
 
 	}
-	p := Figure{inputx, inputy}
-	p.SetPoint()
-	fmt.Println(findMove(p.SetPoint()))
-}
-
-func (p Figure) SetPoint() Point {
-	arr := [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
-	a := 0
-	for i, r := range arr {
-		if r == p.PositionX {
-			a = i + 1
-		}
-	}
-	return Point{
-		x: a,
-		y: p.PositionY,
-	}
-}
-
-func findMove(p Point) []Figure {
-	returnResult := make([]Figure, 0, 2)
-	for _, v := range knightMoves {
-		if canMove(p, v.X, v.Y) {
-			p := Point{(p.x + v.X), (p.y + v.Y)}
-			returnResult = append(returnResult, p.GetPoint())
-		}
-	}
-	return returnResult
-}
-
-func (p Point) GetPoint() Figure {
-	arr := [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
-	a := ""
-	for i, r := range arr {
-		if i+1 == p.x {
-			a = r
-		}
-	}
-	return Figure{
-		PositionX: a,
-		PositionY: p.y,
-	}
-
-}
-
-func canMove(p Point, whereX, whereY int) bool {
-	destX := p.x + whereX
-	destY := p.y + whereY
-	return (destX <= 8 && destX >= 1) && (destY >= 1 && destY <= 8)
+	var p Figure = NewKnight(inputx, inputy)
+	fmt.Println(p.AvailablePoints())
 }
 
 func (a ByName) Len() int {
